@@ -1,14 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ShoppingCart } from 'lucide-react';
+import { Menu, X, ShoppingCart, LogOut } from 'lucide-react';
 import ThemeToggle from '@/components/theme/ThemeToggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { toast } = useToast();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,10 +46,10 @@ const Navbar = () => {
     >
       <nav className="container mx-auto flex items-center justify-between py-4 px-6">
         {/* Logo */}
-        <a href="/" className="text-2xl font-bold flex items-center">
+        <Link to="/" className="text-2xl font-bold flex items-center">
           <span className="text-dns-blue dark:text-white">DNS</span>
           <span className="text-dns-yellow ml-1">Store</span>
-        </a>
+        </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-8 items-center">
@@ -74,16 +77,30 @@ const Navbar = () => {
             </TooltipContent>
           </Tooltip>
           
-          <button 
-            onClick={() => toast({
-              title: "Функция авторизации",
-              description: "Для использования авторизации необходимо подключить Supabase",
-              duration: 5000,
-            })}
-            className="dns-button-primary"
-          >
-            Войти
-          </button>
+          {user ? (
+            <div className="flex items-center space-x-2">
+              <span className="text-dns-darkBlue dark:text-white">
+                {user.email?.split('@')[0]}
+              </span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button 
+                    onClick={signOut} 
+                    className="p-2 rounded-full bg-white hover:bg-gray-100 dark:bg-secondary dark:hover:bg-secondary/80 transition-colors"
+                  >
+                    <LogOut className="h-5 w-5 text-dns-darkBlue dark:text-white" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Выйти</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          ) : (
+            <Link to="/auth" className="dns-button-primary">
+              Войти
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -139,19 +156,31 @@ const Navbar = () => {
             >
               Подписка
             </a>
-            <button 
-              onClick={() => {
-                setIsMenuOpen(false);
-                toast({
-                  title: "Функция авторизации",
-                  description: "Для использования авторизации необходимо подключить Supabase",
-                  duration: 5000,
-                });
-              }}
-              className="dns-button-primary w-full"
-            >
-              Войти
-            </button>
+            {user ? (
+              <div className="flex flex-col space-y-2">
+                <div className="px-4 py-2 text-dns-darkBlue dark:text-white">
+                  {user.email?.split('@')[0]}
+                </div>
+                <button 
+                  onClick={() => {
+                    signOut();
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex items-center px-4 py-2 rounded-lg bg-gray-100 dark:bg-secondary text-dns-darkBlue dark:text-white"
+                >
+                  <LogOut className="h-5 w-5 mr-2" />
+                  Выйти
+                </button>
+              </div>
+            ) : (
+              <Link 
+                to="/auth" 
+                className="dns-button-primary w-full"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Войти
+              </Link>
+            )}
           </div>
         </div>
       )}
