@@ -1,21 +1,17 @@
-
 import React from 'react';
 import { Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from 'lucide-react';
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
-  return (
-    <footer className="bg-white pt-16 border-t border-gray-100">
+  return <footer className="bg-white pt-16 border-t border-gray-100">
       <div className="container mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12">
           <div>
             <div className="flex items-center mb-6">
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="40" rx="8" fill="#0067B1"/>
-                <path d="M8 12H32V16H8V12Z" fill="white"/>
-                <path d="M8 18H20V28H8V18Z" fill="white"/>
-                <path d="M23 18H32V28H23V18Z" fill="white"/>
+                <rect width="40" height="40" rx="8" fill="#0067B1" />
+                <path d="M8 12H32V16H8V12Z" fill="white" />
+                <path d="M8 18H20V28H8V18Z" fill="white" />
+                <path d="M23 18H32V28H23V18Z" fill="white" />
               </svg>
               <span className="ml-2 text-2xl font-bold text-dns-blue">DNS</span>
             </div>
@@ -100,8 +96,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
