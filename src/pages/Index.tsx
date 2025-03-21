@@ -1,12 +1,51 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useEffect } from 'react';
+import Navbar from '@/components/layout/Navbar';
+import Hero from '@/components/home/Hero';
+import Features from '@/components/home/Features';
+import Products from '@/components/home/Products';
+import Promotion from '@/components/home/Promotion';
+import Newsletter from '@/components/home/Newsletter';
+import Footer from '@/components/layout/Footer';
 
 const Index = () => {
+  // Add smooth scroll behavior for anchor links
+  useEffect(() => {
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'A') {
+        const href = target.getAttribute('href');
+        if (href && href.startsWith('#') && href.length > 1) {
+          e.preventDefault();
+          const targetElement = document.querySelector(href);
+          if (targetElement) {
+            const navbarHeight = 80; // Approximate navbar height
+            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarHeight;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+    return () => document.removeEventListener('click', handleAnchorClick);
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen">
+      <Navbar />
+      <main>
+        <Hero />
+        <Features />
+        <Products />
+        <Promotion />
+        <Newsletter />
+      </main>
+      <Footer />
     </div>
   );
 };
