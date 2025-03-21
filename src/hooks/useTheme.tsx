@@ -13,29 +13,26 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [theme, setTheme] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme');
-      return savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    }
-    return 'light';
-  });
+  // Всегда используем светлую тему
+  const [theme, setTheme] = useState<string>('light');
 
   useEffect(() => {
     const root = window.document.documentElement;
     
     root.classList.remove('light', 'dark');
-    root.classList.add(theme);
+    root.classList.add('light');
     
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    localStorage.setItem('theme', 'light');
+  }, []);
 
+  // Функция toggleTheme остается для совместимости, но ничего не меняет
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+    // Ничего не делаем, всегда светлая тема
+    console.log('Тёмная тема отключена');
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme: 'light', toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

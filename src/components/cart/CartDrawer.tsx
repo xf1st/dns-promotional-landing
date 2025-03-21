@@ -40,7 +40,7 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean, onClo
       />
       
       {/* Drawer */}
-      <div className="absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-xl transition-transform duration-300 p-6 overflow-auto">
+      <div className="absolute right-0 top-0 bottom-0 h-full w-full max-w-md bg-background shadow-xl transition-transform duration-300 p-6 overflow-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-semibold flex items-center">
             <ShoppingBag className="mr-2" /> 

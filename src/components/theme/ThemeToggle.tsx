@@ -1,13 +1,18 @@
 
 import React from 'react';
-import { Sun, Moon } from 'lucide-react';
+import { Sun } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
+// Компонент скрыт, так как темная тема отключена
 const ThemeToggle = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { toggleTheme } = useTheme();
   
+  // Скрываем кнопку полностью, возвращая null
+  return null;
+  
+  /* Оригинальный код (отключен)
   return (
     <TooltipProvider>
       <Tooltip>
@@ -18,20 +23,17 @@ const ThemeToggle = () => {
             onClick={toggleTheme}
             className="rounded-full w-10 h-10 bg-white dark:bg-secondary border-gray-200 dark:border-gray-600"
           >
-            {theme === 'dark' ? (
-              <Sun className="h-5 w-5 text-yellow-500" />
-            ) : (
-              <Moon className="h-5 w-5 text-gray-700" />
-            )}
+            <Sun className="h-5 w-5 text-yellow-500" />
             <span className="sr-only">Переключить тему</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{theme === 'dark' ? 'Включить светлую тему' : 'Включить темную тему'}</p>
+          <p>Включить светлую тему</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
+  */
 };
 
 export default ThemeToggle;
