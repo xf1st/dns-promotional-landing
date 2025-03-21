@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCart, CartItem } from "@/hooks/useCart";
+import { useCart } from "@/hooks/useCart";
+import type { CartItem as CartItemType } from "@/hooks/useCart";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
 
@@ -122,7 +123,7 @@ function CartItem({
   onRemove, 
   onUpdateQuantity 
 }: { 
-  item: CartItem; 
+  item: CartItemType; 
   onRemove: (id: number) => void; 
   onUpdateQuantity: (id: number, quantity: number) => void;
 }) {
