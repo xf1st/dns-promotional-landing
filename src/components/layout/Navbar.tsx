@@ -5,13 +5,17 @@ import ThemeToggle from '@/components/theme/ThemeToggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { useCart } from '@/hooks/useCart';
 import { Link } from 'react-router-dom';
+import CartDrawer from '@/components/cart/CartDrawer';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { toast } = useToast();
   const { user, signOut } = useAuth();
+  const { totalItems } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,12 +34,8 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const showCartToast = () => {
-    toast({
-      title: "Корзина пуста",
-      description: "Добавьте товары в корзину для оформления заказа",
-      duration: 3000,
-    });
+  const openCart = () => {
+    setIsCartOpen(true);
   };
 
   return (
@@ -54,7 +54,7 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-8 items-center">
           <a href="#features" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Особенности</a>
-          <a href="#products" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Продукты</a>
+          <Link to="/catalog" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Каталог</Link>
           <a href="#promotion" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Акции</a>
           <a href="#newsletter" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Подписка</a>
         </div>
@@ -66,10 +66,15 @@ const Navbar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <button 
-                onClick={showCartToast} 
-                className="p-2 rounded-full bg-white hover:bg-gray-100 dark:bg-secondary dark:hover:bg-secondary/80 transition-colors"
+                onClick={openCart} 
+                className="p-2 rounded-full bg-white hover:bg-gray-100 dark:bg-secondary dark:hover:bg-secondary/80 transition-colors relative"
               >
                 <ShoppingCart className="h-5 w-5 text-dns-darkBlue dark:text-white" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-dns-yellow text-dns-darkBlue text-xs font-bold rounded-full size-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
               </button>
             </TooltipTrigger>
             <TooltipContent>
@@ -108,10 +113,15 @@ const Navbar = () => {
           <ThemeToggle />
           
           <button 
-            onClick={showCartToast} 
-            className="p-2 rounded-full bg-white hover:bg-gray-100 dark:bg-secondary dark:hover:bg-secondary/80 transition-colors"
+            onClick={openCart} 
+            className="p-2 rounded-full bg-white hover:bg-gray-100 dark:bg-secondary dark:hover:bg-secondary/80 transition-colors relative"
           >
             <ShoppingCart className="h-5 w-5 text-dns-darkBlue dark:text-white" />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-dns-yellow text-dns-darkBlue text-xs font-bold rounded-full size-5 flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
           </button>
           
           <button onClick={toggleMenu} className="text-dns-darkBlue dark:text-white">
@@ -135,13 +145,13 @@ const Navbar = () => {
             >
               Особенности
             </a>
-            <a 
-              href="#products" 
+            <Link 
+              to="/catalog" 
               className="text-dns-darkBlue hover:text-dns-blue px-4 py-2 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:text-white dark:hover:bg-secondary/80"
               onClick={() => setIsMenuOpen(false)}
             >
-              Продукты
-            </a>
+              Каталог
+            </Link>
             <a 
               href="#promotion" 
               className="text-dns-darkBlue hover:text-dns-blue px-4 py-2 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:text-white dark:hover:bg-secondary/80"
@@ -184,6 +194,9 @@ const Navbar = () => {
           </div>
         </div>
       )}
+
+      {/* Cart Drawer */}
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 };

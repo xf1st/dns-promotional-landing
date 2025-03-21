@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { ShoppingCart, Heart, Star } from 'lucide-react';
+import { useCart } from '@/hooks/useCart';
 
 const products = [
   {
@@ -55,7 +56,7 @@ const formatPrice = (price: number) => {
 
 const Products = () => {
   const [favoriteProducts, setFavoriteProducts] = useState<number[]>([]);
-  const [cartProducts, setCartProducts] = useState<number[]>([]);
+  const { addItem, items: cartItems } = useCart();
   const productsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const toggleFavorite = (id: number) => {
@@ -64,13 +65,19 @@ const Products = () => {
     );
   };
 
-  const addToCart = (id: number) => {
-    if (!cartProducts.includes(id)) {
-      setCartProducts(prev => [...prev, id]);
-      
-      // Show a toast or some notification here
-      console.log(`Product ${id} added to cart`);
-    }
+  const handleAddToCart = (product: any) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      category: product.category
+    });
+  };
+
+  // Проверяем, находится ли товар в корзине
+  const isInCart = (id: number) => {
+    return cartItems.some(item => item.id === id);
   };
 
   useEffect(() => {
@@ -182,9 +189,9 @@ const Products = () => {
                 </div>
                 
                 <button 
-                  onClick={() => addToCart(product.id)}
+                  onClick={() => handleAddToCart(product)}
                   className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                    cartProducts.includes(product.id)
+                    isInCart(product.id)
                       ? 'bg-green-500 text-white'
                       : 'bg-dns-blue text-white hover:bg-dns-blue/80'
                   }`}
@@ -197,7 +204,7 @@ const Products = () => {
         </div>
         
         <div className="text-center mt-12">
-          <a href="#" className="dns-button-primary inline-flex items-center">
+          <a href="/catalog" className="dns-button-primary inline-flex items-center">
             <span>Смотреть все товары</span>
             <svg className="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
