@@ -36,6 +36,7 @@ const PromoBanner = () => {
           duration: 3000,
         });
         navigator.clipboard.writeText('DNS15');
+        closeBanner(); // Close banner after action
       },
       backgroundColor: 'bg-[#FEF7CD]',
       textColor: 'text-[#403E43]'
@@ -51,6 +52,7 @@ const PromoBanner = () => {
           description: 'Вы будете получать все новости первыми',
           duration: 3000,
         });
+        closeBanner(); // Close banner after action
       },
       backgroundColor: 'bg-[#D3E4FD]',
       textColor: 'text-[#403E43]'
@@ -65,6 +67,7 @@ const PromoBanner = () => {
           description: 'Вы успешно подписались на нашу рассылку',
           duration: 3000,
         });
+        closeBanner(); // Close banner after action
       },
       backgroundColor: 'bg-[#E5DEFF]',
       textColor: 'text-[#403E43]'
@@ -170,7 +173,10 @@ const PromoBanner = () => {
             {currentBanner.description}
           </p>
           <button 
-            onClick={currentBanner.buttonAction}
+            onClick={() => {
+              // Call the action and banner will be closed in the action
+              currentBanner.buttonAction();
+            }}
             className="mt-2 bg-white hover:bg-gray-100 transition-colors font-medium py-1 px-4 rounded shadow-sm border border-gray-200"
           >
             {currentBanner.buttonText}

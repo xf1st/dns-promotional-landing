@@ -1,32 +1,35 @@
-
 import React, { useRef, useEffect } from 'react';
 import { Clock, ArrowRight } from 'lucide-react';
+import { useAuth, useNavigate } from 'react-router-dom';
 
 const Promotion = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<HTMLDivElement>(null);
   
-  // Countdown timer logic
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
+  const handlePromotionClick = () => {
+    if (user) {
+      navigate('/catalog');
+    } else {
+      navigate('/auth');
+    }
+  };
+
   useEffect(() => {
-    // Set the date we're counting down to (3 days from now)
     const countDownDate = new Date();
     countDownDate.setDate(countDownDate.getDate() + 3);
     
-    // Update the count down every 1 second
     const interval = setInterval(() => {
-      // Get today's date and time
       const now = new Date().getTime();
-      
-      // Find the distance between now and the count down date
       const distance = countDownDate.getTime() - now;
       
-      // Time calculations for days, hours, minutes and seconds
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
       
-      // Display the result
       if (timerRef.current) {
         timerRef.current.innerHTML = `
           <div class="flex gap-4">
@@ -58,7 +61,6 @@ const Promotion = () => {
         `;
       }
       
-      // If the count down is finished, clear the interval
       if (distance < 0) {
         clearInterval(interval);
         if (timerRef.current) {
@@ -70,7 +72,6 @@ const Promotion = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Parallax effect
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return;
@@ -98,7 +99,6 @@ const Promotion = () => {
       ref={sectionRef}
       className="py-20 relative bg-gradient-to-r from-dns-blue to-dns-lightBlue overflow-hidden"
     >
-      {/* Background decorative elements */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/3 -translate-y-1/3 parallax"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full translate-x-1/4 translate-y-1/4 parallax"></div>
       
@@ -118,13 +118,13 @@ const Promotion = () => {
           </p>
           
           <div className="mb-10 flex justify-center" ref={timerRef}>
-            {/* Timer will be inserted here by JavaScript */}
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
               href="#" 
               className="bg-white text-dns-blue font-medium px-8 py-4 rounded-lg hover:bg-white/90 transition-colors flex items-center justify-center"
+              onClick={handlePromotionClick}
             >
               <span>Перейти к акции</span>
               <ArrowRight size={18} className="ml-2" />

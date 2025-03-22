@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,8 +13,9 @@ const Auth = () => {
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Если пользователь уже авторизован, перенаправляем на главную страницу
+  // Set page title
   useEffect(() => {
+    document.title = 'DNStoDNS - авторизация';
     if (user) {
       navigate('/');
     }

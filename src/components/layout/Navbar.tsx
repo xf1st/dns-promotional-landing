@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/hooks/useCart';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CartDrawer from '@/components/cart/CartDrawer';
 
 const Navbar = () => {
@@ -16,6 +16,7 @@ const Navbar = () => {
   const { toast } = useToast();
   const { user, signOut } = useAuth();
   const { totalItems } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +38,20 @@ const Navbar = () => {
   const openCart = () => {
     setIsCartOpen(true);
   };
+  
+  const handlePromotionClick = () => {
+    setIsMenuOpen(false);
+    if (user) {
+      navigate('/catalog');
+    } else {
+      navigate('/auth');
+    }
+  };
+
+  const handleReviewsClick = () => {
+    setIsMenuOpen(false);
+    navigate('/reviews');
+  };
 
   return (
     <header
@@ -55,8 +70,22 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-8 items-center">
           <a href="#features" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Особенности</a>
           <Link to="/catalog" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Каталог</Link>
-          <a href="#promotion" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Акции</a>
-          <a href="#newsletter" className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors">Подписка</a>
+          <a 
+            href="#promotion" 
+            onClick={(e) => {
+              e.preventDefault();
+              handlePromotionClick();
+            }}
+            className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors"
+          >
+            Акции
+          </a>
+          <Link 
+            to="/reviews" 
+            className="text-dns-darkBlue hover:text-dns-blue dark:text-gray-200 dark:hover:text-white transition-colors"
+          >
+            Отзывы
+          </Link>
         </div>
 
         {/* Action buttons */}
@@ -152,20 +181,19 @@ const Navbar = () => {
             >
               Каталог
             </Link>
-            <a 
-              href="#promotion" 
-              className="text-dns-darkBlue hover:text-dns-blue px-4 py-2 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:text-white dark:hover:bg-secondary/80"
-              onClick={() => setIsMenuOpen(false)}
+            <button 
+              className="text-left text-dns-darkBlue hover:text-dns-blue px-4 py-2 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:text-white dark:hover:bg-secondary/80"
+              onClick={handlePromotionClick}
             >
               Акции
-            </a>
-            <a 
-              href="#newsletter" 
+            </button>
+            <Link 
+              to="/reviews"
               className="text-dns-darkBlue hover:text-dns-blue px-4 py-2 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:text-white dark:hover:bg-secondary/80"
               onClick={() => setIsMenuOpen(false)}
             >
-              Подписка
-            </a>
+              Отзывы
+            </Link>
             {user ? (
               <div className="flex flex-col space-y-2">
                 <div className="px-4 py-2 text-dns-darkBlue dark:text-white">

@@ -13,6 +13,11 @@ import Testimonials from '@/components/home/Testimonials';
 import FAQ from '@/components/home/FAQ';
 
 const Index = () => {
+  // Set page title
+  useEffect(() => {
+    document.title = 'DNStoDNS - магазин техники';
+  }, []);
+
   // Add smooth scroll behavior for anchor links
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
