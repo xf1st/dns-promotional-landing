@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
@@ -16,6 +15,22 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean, onClo
   const { user } = useAuth();
   const [processing, setProcessing] = useState(false);
 
+  useEffect(() => {
+    if (isOpen) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = '15px';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isOpen]);
+
   const handleCheckout = () => {
     if (!user) {
       onClose();
@@ -23,7 +38,6 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean, onClo
     }
     
     setProcessing(true);
-    // Имитация процесса оформления заказа
     setTimeout(() => {
       clearCart();
       setProcessing(false);
@@ -33,13 +47,11 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean, onClo
 
   return (
     <div className={`fixed inset-0 z-[9999] ${isOpen ? 'block' : 'hidden'}`}>
-      {/* Overlay */}
       <div 
         className="fixed inset-0 bg-black/50 backdrop-blur-sm" 
         onClick={onClose}
       />
       
-      {/* Drawer */}
       <div className="fixed right-0 top-0 bottom-0 h-full w-full max-w-md bg-background shadow-xl transition-transform duration-300 p-6 overflow-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-semibold flex items-center">
@@ -117,7 +129,6 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean, onClo
   );
 }
 
-// Компонент для отображения отдельного товара в корзине
 function CartItem({ 
   item, 
   onRemove, 

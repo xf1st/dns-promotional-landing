@@ -15,6 +15,7 @@ interface BannerData {
   buttonText: string;
   buttonAction: () => void;
   backgroundColor: string;
+  textColor: string;
 }
 
 const PromoBanner = () => {
@@ -22,7 +23,7 @@ const PromoBanner = () => {
   const [currentBanner, setCurrentBanner] = useState<BannerData | null>(null);
   const { toast: uiToast } = useToast();
 
-  // Определение всех возможных баннеров
+  // Определение всех возможных баннеров с обновленными стилями
   const banners: BannerData[] = [
     {
       type: 'promo',
@@ -36,7 +37,8 @@ const PromoBanner = () => {
         });
         navigator.clipboard.writeText('DNS15');
       },
-      backgroundColor: 'bg-dns-yellow dark:bg-dns-yellow'
+      backgroundColor: 'bg-[#FEF7CD]',
+      textColor: 'text-[#403E43]'
     },
     {
       type: 'telegram',
@@ -50,7 +52,8 @@ const PromoBanner = () => {
           duration: 3000,
         });
       },
-      backgroundColor: 'bg-[#0088cc] text-white'
+      backgroundColor: 'bg-[#D3E4FD]',
+      textColor: 'text-[#403E43]'
     },
     {
       type: 'newsletter',
@@ -63,7 +66,8 @@ const PromoBanner = () => {
           duration: 3000,
         });
       },
-      backgroundColor: 'bg-dns-blue text-white'
+      backgroundColor: 'bg-[#E5DEFF]',
+      textColor: 'text-[#403E43]'
     }
   ];
 
@@ -150,8 +154,8 @@ const PromoBanner = () => {
   if (!isVisible || !currentBanner) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 animate-slide-up">
-      <div className={`${currentBanner.backgroundColor} p-3 sm:p-4 text-center relative`}>
+    <div className="fixed bottom-6 left-0 right-0 z-50 animate-slide-up flex justify-center pointer-events-none">
+      <div className={`${currentBanner.backgroundColor} ${currentBanner.textColor} p-3 sm:p-4 text-center relative shadow-md rounded-xl border border-gray-200 max-w-xl mx-auto pointer-events-auto animate-float`}>
         <button 
           onClick={closeBanner}
           className="absolute right-2 top-2 p-1 rounded-full hover:bg-black/10 transition-colors"
@@ -160,14 +164,14 @@ const PromoBanner = () => {
           <X className="h-5 w-5 text-current" />
         </button>
         
-        <div className="max-w-4xl mx-auto px-8">
+        <div className="px-6">
           <p className="font-medium">
             <span className="text-lg font-bold block mb-1">{currentBanner.title}</span>
             {currentBanner.description}
           </p>
           <button 
             onClick={currentBanner.buttonAction}
-            className="mt-2 bg-white text-black hover:bg-gray-100 transition-colors font-medium py-1 px-4 rounded"
+            className="mt-2 bg-white hover:bg-gray-100 transition-colors font-medium py-1 px-4 rounded shadow-sm border border-gray-200"
           >
             {currentBanner.buttonText}
           </button>
