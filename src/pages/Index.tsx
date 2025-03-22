@@ -8,6 +8,9 @@ import Promotion from '@/components/home/Promotion';
 import Newsletter from '@/components/home/Newsletter';
 import Footer from '@/components/layout/Footer';
 import PromoBanner from '@/components/promotions/PromoBanner';
+import Advantages from '@/components/home/Advantages';
+import Testimonials from '@/components/home/Testimonials';
+import FAQ from '@/components/home/FAQ';
 
 const Index = () => {
   // Add smooth scroll behavior for anchor links
@@ -43,7 +46,10 @@ const Index = () => {
         <Hero />
         <Features />
         <Products />
+        <Advantages />
         <Promotion />
+        <Testimonials />
+        <FAQ />
         <Newsletter />
       </main>
       <Footer />
