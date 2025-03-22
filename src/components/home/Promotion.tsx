@@ -1,6 +1,8 @@
+
 import React, { useRef, useEffect } from 'react';
 import { Clock, ArrowRight } from 'lucide-react';
-import { useAuth, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 const Promotion = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
