@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { toast } from "sonner";
+import { useAuth } from '@/hooks/useAuth';
 
 export type CartItem = {
   id: number;
@@ -27,25 +28,41 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const { toast: uiToast } = useToast();
+  const { user } = useAuth();
   
   // Загрузка корзины из localStorage при инициализации
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        setItems(JSON.parse(savedCart));
-      } catch (e) {
-        console.error('Ошибка при загрузке корзины из localStorage:', e);
+    if (user) {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        try {
+          setItems(JSON.parse(savedCart));
+        } catch (e) {
+          console.error('Ошибка при загрузке корзины из localStorage:', e);
+        }
       }
+    } else {
+      // Очищаем корзину, если пользователь не авторизован
+      setItems([]);
     }
-  }, []);
+  }, [user]);
   
   // Сохранение корзины в localStorage при изменении
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(items));
-  }, [items]);
+    if (user) {
+      localStorage.setItem('cart', JSON.stringify(items));
+    }
+  }, [items, user]);
   
   const addItem = (product: Omit<CartItem, 'quantity'>) => {
+    // Проверяем, авторизован ли пользователь
+    if (!user) {
+      toast.error('Необходима авторизация', {
+        description: 'Для добавления товара в корзину необходимо войти в аккаунт',
+      });
+      return;
+    }
+
     setItems(prevItems => {
       // Проверяем, есть ли товар уже в корзине
       const existingItem = prevItems.find(item => item.id === product.id);
@@ -71,6 +88,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const removeItem = (id: number) => {
+    if (!user) return;
+    
     setItems(prevItems => {
       const itemToRemove = prevItems.find(item => item.id === id);
       
@@ -83,7 +102,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const updateQuantity = (id: number, quantity: number) => {
-    if (quantity < 1) return;
+    if (!user || quantity < 1) return;
     
     setItems(prevItems => 
       prevItems.map(item => 
@@ -93,6 +112,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const clearCart = () => {
+    if (!user) return;
+    
     setItems([]);
     uiToast({
       title: "Корзина очищена",

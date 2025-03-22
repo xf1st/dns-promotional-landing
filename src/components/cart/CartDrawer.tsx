@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
+import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
 import type { CartItem as CartItemType } from "@/hooks/useCart";
@@ -66,7 +67,20 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean, onClo
           </button>
         </div>
         
-        {items.length === 0 ? (
+        {!user ? (
+          <div className="text-center py-16">
+            <LogIn className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
+            <h3 className="text-xl font-medium mb-2">Необходима авторизация</h3>
+            <p className="text-muted-foreground mb-8">
+              Для добавления товаров в корзину необходимо войти в аккаунт
+            </p>
+            <Link to="/auth">
+              <Button className="mx-auto">
+                Войти в аккаунт
+              </Button>
+            </Link>
+          </div>
+        ) : items.length === 0 ? (
           <div className="text-center py-16">
             <ShoppingBag className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
             <h3 className="text-xl font-medium mb-2">Ваша корзина пуста</h3>
@@ -110,7 +124,7 @@ export default function CartDrawer({ isOpen, onClose }: { isOpen: boolean, onClo
                   onClick={handleCheckout}
                   disabled={processing}
                 >
-                  {processing ? 'Обработка...' : user ? 'Оформить заказ' : 'Войти и оформить заказ'}
+                  {processing ? 'Обработка...' : 'Оформить заказ'}
                   <ArrowRight />
                 </Button>
                 <Button 

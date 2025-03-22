@@ -1,7 +1,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ShoppingCart, Heart, Star } from 'lucide-react';
+import { ShoppingCart, Heart, Star, LogIn } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
+import { useAuth } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { toast } from "sonner";
 
 const products = [
   {
@@ -57,9 +61,17 @@ const formatPrice = (price: number) => {
 const Products = () => {
   const [favoriteProducts, setFavoriteProducts] = useState<number[]>([]);
   const { addItem, items: cartItems } = useCart();
+  const { user } = useAuth();
   const productsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const toggleFavorite = (id: number) => {
+    if (!user) {
+      toast.error('Необходима авторизация', {
+        description: 'Для добавления в избранное необходимо войти в аккаунт',
+      });
+      return;
+    }
+    
     setFavoriteProducts(prev => 
       prev.includes(id) ? prev.filter(productId => productId !== id) : [...prev, id]
     );
@@ -124,6 +136,18 @@ const Products = () => {
           <p className="subtitle">
             Самые востребованные модели с высоким рейтингом и отличными отзывами от наших покупателей
           </p>
+          
+          {!user && (
+            <div className="mt-8 p-4 bg-dns-blue/10 rounded-lg inline-block">
+              <p className="text-dns-darkBlue mb-3">Для добавления товаров в корзину необходимо войти в аккаунт</p>
+              <Link to="/auth">
+                <Button className="flex items-center gap-2">
+                  <LogIn size={16} />
+                  Войти в аккаунт
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -190,13 +214,16 @@ const Products = () => {
                 
                 <button 
                   onClick={() => handleAddToCart(product)}
+                  disabled={!user}
                   className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-                    isInCart(product.id)
-                      ? 'bg-green-500 text-white'
-                      : 'bg-dns-blue text-white hover:bg-dns-blue/80'
+                    !user 
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : isInCart(product.id)
+                        ? 'bg-green-500 text-white'
+                        : 'bg-dns-blue text-white hover:bg-dns-blue/80'
                   }`}
                 >
-                  <ShoppingCart size={18} />
+                  {!user ? <LogIn size={18} /> : <ShoppingCart size={18} />}
                 </button>
               </div>
             </div>
