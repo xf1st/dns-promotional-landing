@@ -56,18 +56,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error;
       
       toast({
-        title: "Login successful",
-        description: "You have successfully logged in",
+        title: "Успешный вход",
+        description: "Вы успешно вошли в аккаунт",
       });
       
       navigate('/');
     } catch (error: any) {
       toast({
-        title: "Login error",
+        title: "Ошибка входа",
         description: error.message,
         variant: "destructive",
       });
-      console.error('Login error:', error.message);
+      console.error('Ошибка входа:', error.message);
     } finally {
       setLoading(false);
     }
@@ -84,17 +84,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error;
       
       toast({
-        title: "Registration complete",
-        description: "Please check your email to confirm your account",
+        title: "Регистрация выполнена",
+        description: "Проверьте вашу почту для подтверждения аккаунта",
       });
       
     } catch (error: any) {
       toast({
-        title: "Registration error",
+        title: "Ошибка регистрации",
         description: error.message,
         variant: "destructive",
       });
-      console.error('Registration error:', error.message);
+      console.error('Ошибка регистрации:', error.message);
     } finally {
       setLoading(false);
     }
@@ -118,11 +118,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
     } catch (error: any) {
       toast({
-        title: "Google login error",
+        title: "Ошибка входа через Google",
         description: error.message,
         variant: "destructive",
       });
-      console.error('Google login error:', error.message);
+      console.error('Ошибка входа через Google:', error.message);
       setLoading(false);
     }
   };
@@ -132,17 +132,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(true);
       await supabase.auth.signOut();
       toast({
-        title: "Logout complete",
-        description: "You have been logged out of your account",
+        title: "Выход выполнен",
+        description: "Вы вышли из своего аккаунта",
       });
       navigate('/auth');
     } catch (error: any) {
       toast({
-        title: "Logout error",
+        title: "Ошибка при выходе",
         description: error.message,
         variant: "destructive",
       });
-      console.error('Logout error:', error.message);
+      console.error('Ошибка при выходе:', error.message);
     } finally {
       setLoading(false);
     }

@@ -17,7 +17,7 @@ const Auth = () => {
 
   // Set page title
   useEffect(() => {
-    document.title = 'DNStoDNS - Authorization';
+    document.title = 'DNStoDNS - Авторизация';
     if (user) {
       navigate('/');
     }
@@ -52,15 +52,15 @@ const Auth = () => {
               <span className="bg-gradient-to-r from-dns-blue via-[#9b87f5] to-[#D946EF] bg-clip-text text-transparent">DNSStore</span>
             </a>
           </div>
-          <CardTitle className="text-2xl text-center">Welcome</CardTitle>
+          <CardTitle className="text-2xl text-center">Добро пожаловать</CardTitle>
           <CardDescription className="text-center">
-            Log in to your account or register
+          Войдите в аккаунт или зарегистрируйтесь
           </CardDescription>
         </CardHeader>
         <Tabs defaultValue="signin" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Login</TabsTrigger>
-            <TabsTrigger value="signup">Register</TabsTrigger>
+            <TabsTrigger value="signin">Вход</TabsTrigger>
+            <TabsTrigger value="signup">Регистрация</TabsTrigger>
           </TabsList>
           <CardContent className="p-6">
             <TabsContent value="signin">
@@ -69,7 +69,7 @@ const Auth = () => {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Email"
+                    placeholder="Электронная почта"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -79,7 +79,7 @@ const Auth = () => {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Password"
+                    placeholder="Пароль"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -87,7 +87,7 @@ const Auth = () => {
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                  Login
+                  Войти
                 </Button>
                 
                 <div className="relative my-4">
@@ -95,7 +95,7 @@ const Auth = () => {
                     <Separator />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">or login with</span>
+                    <span className="bg-background px-2 text-muted-foreground">или войти через</span>
                   </div>
                 </div>
                 
@@ -114,7 +114,7 @@ const Auth = () => {
                       <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
                     </svg>
                   )}
-                  Login with Google
+                  Войти через Google
                 </Button>
               </form>
             </TabsContent>
@@ -124,7 +124,7 @@ const Auth = () => {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Email"
+                    placeholder="Электронная почта"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -134,7 +134,7 @@ const Auth = () => {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Password"
+                    placeholder="Пароль"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -142,7 +142,7 @@ const Auth = () => {
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                  Register
+                  Зарегистрироваться
                 </Button>
                 
                 <div className="relative my-4">
@@ -150,7 +150,7 @@ const Auth = () => {
                     <Separator />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">or register with</span>
+                    <span className="bg-background px-2 text-muted-foreground">или зарегистрироваться через</span>
                   </div>
                 </div>
                 
@@ -169,7 +169,7 @@ const Auth = () => {
                       <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
                     </svg>
                   )}
-                  Register with Google
+                  Войти через Google
                 </Button>
               </form>
             </TabsContent>
@@ -177,7 +177,7 @@ const Auth = () => {
         </Tabs>
         <CardFooter className="flex justify-center">
           <Button variant="outline" onClick={() => navigate('/')} className="mt-2">
-            Return to main page
+          Вернуться на главную
           </Button>
         </CardFooter>
       </Card>
