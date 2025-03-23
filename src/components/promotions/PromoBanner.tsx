@@ -4,10 +4,10 @@ import { X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { toast } from 'sonner';
 
-// Типы баннеров
+// Banner types
 type BannerType = 'promo' | 'telegram' | 'newsletter';
 
-// Интерфейс для баннера
+// Banner interface
 interface BannerData {
   type: BannerType;
   title: string;
@@ -16,6 +16,7 @@ interface BannerData {
   buttonAction: () => void;
   backgroundColor: string;
   textColor: string;
+  borderColor: string;
 }
 
 const PromoBanner = () => {
@@ -23,7 +24,7 @@ const PromoBanner = () => {
   const [currentBanner, setCurrentBanner] = useState<BannerData | null>(null);
   const { toast: uiToast } = useToast();
 
-  // Определение всех возможных баннеров с обновленными стилями
+  // Define all possible banners with enhanced styles
   const banners: BannerData[] = [
     {
       type: 'promo',
@@ -38,8 +39,9 @@ const PromoBanner = () => {
         navigator.clipboard.writeText('DNS15');
         closeBanner(); // Close banner after action
       },
-      backgroundColor: 'bg-[#FEF7CD]',
-      textColor: 'text-[#403E43]'
+      backgroundColor: 'bg-gradient-to-r from-[#FEF9E7] to-[#FEF7CD]',
+      textColor: 'text-[#403E43]',
+      borderColor: 'border-amber-200'
     },
     {
       type: 'telegram',
@@ -54,8 +56,9 @@ const PromoBanner = () => {
         });
         closeBanner(); // Close banner after action
       },
-      backgroundColor: 'bg-[#D3E4FD]',
-      textColor: 'text-[#403E43]'
+      backgroundColor: 'bg-gradient-to-r from-[#DFE9FD] to-[#D3E4FD]',
+      textColor: 'text-[#403E43]',
+      borderColor: 'border-blue-200'
     },
     {
       type: 'newsletter',
@@ -69,66 +72,90 @@ const PromoBanner = () => {
         });
         closeBanner(); // Close banner after action
       },
-      backgroundColor: 'bg-[#E5DEFF]',
-      textColor: 'text-[#403E43]'
+      backgroundColor: 'bg-gradient-to-r from-[#EEE6FF] to-[#E5DEFF]',
+      textColor: 'text-[#403E43]',
+      borderColor: 'border-purple-200'
     }
   ];
 
+  // Ensure only one banner is shown and prevent overlapping
   useEffect(() => {
-    // Проверяем, когда последний раз был скрыт баннер
+    // Track active banners to avoid showing multiple
+    let isMounted = true;
+    
+    // Check when the last banner was hidden
     const checkBannerTimings = () => {
+      if (!isMounted) return;
+      
       const lastBannerTime = localStorage.getItem('lastBannerTime');
       const lastBannerType = localStorage.getItem('lastBannerType');
       const now = Date.now();
       
-      // Если прошло больше 15 минут или баннер еще не показывался
+      // If more than 15 minutes have passed or no banner has been shown yet
       if (!lastBannerTime || (now - parseInt(lastBannerTime, 10)) > 15 * 60 * 1000) {
-        // Выбираем случайный баннер, но не тот же, что показывался последний раз
+        // Make sure no banner is currently visible before showing a new one
+        setIsVisible(false);
+        
+        // Choose a random banner, but not the same as the last one shown
         let availableBanners = banners;
         if (lastBannerType) {
           availableBanners = banners.filter(banner => banner.type !== lastBannerType);
         }
         
-        // Если есть доступные баннеры, выбираем случайный
+        // If there are available banners, select a random one
         if (availableBanners.length > 0) {
           const randomIndex = Math.floor(Math.random() * availableBanners.length);
-          setCurrentBanner(availableBanners[randomIndex]);
-          setIsVisible(true);
+          
+          // Short timeout to ensure any previous banner is fully hidden
+          setTimeout(() => {
+            if (isMounted) {
+              setCurrentBanner(availableBanners[randomIndex]);
+              setIsVisible(true);
+            }
+          }, 300);
         } else {
-          // Если нет доступных баннеров (кроме последнего), показываем любой
+          // If no available banners (except the last one), show any
           const randomIndex = Math.floor(Math.random() * banners.length);
-          setCurrentBanner(banners[randomIndex]);
-          setIsVisible(true);
+          
+          // Short timeout to ensure any previous banner is fully hidden
+          setTimeout(() => {
+            if (isMounted) {
+              setCurrentBanner(banners[randomIndex]);
+              setIsVisible(true);
+            }
+          }, 300);
         }
       }
     };
 
-    // Проверяем при загрузке страницы
+    // Check on page load with a delay
     const timer = setTimeout(() => {
       checkBannerTimings();
-    }, 5000); // Задержка 5 секунд перед первой проверкой
+    }, 5000); // 5-second delay before first check
 
-    // Обработчик события прокрутки
+    // Scroll event handler with debounce
     let scrollTimeout: number | null = null;
     const handleScroll = () => {
-      // Отменяем предыдущий таймаут, если он был
+      // Cancel previous timeout if it exists
       if (scrollTimeout) {
         clearTimeout(scrollTimeout);
       }
       
-      // Устанавливаем новый таймаут для проверки после окончания прокрутки
+      // Set new timeout for checking after scrolling stops
       scrollTimeout = window.setTimeout(() => {
-        // Записываем время последнего скролла
+        // Record last scroll time
         localStorage.setItem('lastScrollTime', Date.now().toString());
         
-        // Проверяем, нужно ли показать баннер
+        // Check if a banner should be shown
         checkBannerTimings();
-      }, 1000); // Ждем 1 секунду после окончания прокрутки
+      }, 1000); // Wait 1 second after scrolling stops
     };
 
     window.addEventListener('scroll', handleScroll);
 
+    // Cleanup function
     return () => {
+      isMounted = false;
       clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
       if (scrollTimeout) {
@@ -140,25 +167,31 @@ const PromoBanner = () => {
   const closeBanner = () => {
     setIsVisible(false);
     
-    // Показываем уведомление при закрытии баннера
+    // Show notification when banner is closed
     uiToast({
       title: "Баннер скрыт",
       description: "Вы всегда можете найти наши акции в разделе 'Промо'",
       duration: 3000,
     });
 
-    // Сохраняем информацию о времени закрытия баннера и его типе
+    // Save information about when the banner was closed and its type
     if (currentBanner) {
       localStorage.setItem('lastBannerTime', Date.now().toString());
       localStorage.setItem('lastBannerType', currentBanner.type);
     }
   };
 
+  // Don't render anything if no banner is visible
   if (!isVisible || !currentBanner) return null;
 
   return (
-    <div className="fixed bottom-6 left-0 right-0 z-50 animate-slide-up flex justify-center pointer-events-none">
-      <div className={`${currentBanner.backgroundColor} ${currentBanner.textColor} p-3 sm:p-4 text-center relative shadow-md rounded-xl border border-gray-200 max-w-xl mx-auto pointer-events-auto animate-float`}>
+    <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
+      <div 
+        className={`${currentBanner.backgroundColor} ${currentBanner.textColor} p-4 sm:p-5 text-center relative shadow-lg rounded-xl 
+        border ${currentBanner.borderColor} max-w-xl mx-auto pointer-events-auto animate-float backdrop-blur-none
+        transition-all duration-300 transform translate-y-0`}
+        style={{ backdropFilter: 'none' }}
+      >
         <button 
           onClick={closeBanner}
           className="absolute right-2 top-2 p-1 rounded-full hover:bg-black/10 transition-colors"
@@ -177,7 +210,7 @@ const PromoBanner = () => {
               // Call the action and banner will be closed in the action
               currentBanner.buttonAction();
             }}
-            className="mt-2 bg-white hover:bg-gray-100 transition-colors font-medium py-1 px-4 rounded shadow-sm border border-gray-200"
+            className="mt-2 bg-white hover:bg-gray-100 transition-colors font-medium py-2 px-4 rounded-md shadow-sm border border-gray-200 hover:shadow-md"
           >
             {currentBanner.buttonText}
           </button>
