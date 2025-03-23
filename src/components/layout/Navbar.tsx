@@ -82,9 +82,9 @@ export default function Navbar() {
           
           {!isMobile && (
             <nav className="hidden md:flex space-x-8">
-              <Link to="/" className="text-dns-darkBlue hover:text-dns-blue transition-colors">Главная</Link>
-              <Link to="/catalog" className="text-dns-darkBlue hover:text-dns-blue transition-colors">Каталог</Link>
-              <Link to="/reviews" className="text-dns-darkBlue hover:text-dns-blue transition-colors">Отзывы</Link>
+              <Link to="/" className="text-dns-darkBlue hover:text-dns-blue transition-colors">Main</Link>
+              <Link to="/catalog" className="text-dns-darkBlue hover:text-dns-blue transition-colors">Catalog</Link>
+              <Link to="/reviews" className="text-dns-darkBlue hover:text-dns-blue transition-colors">Reviews</Link>
             </nav>
           )}
         </div>
@@ -97,7 +97,7 @@ export default function Navbar() {
               <button 
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2 text-dns-darkBlue hover:text-dns-blue transition-colors"
-                aria-label="Корзина"
+                aria-label="Cart"
               >
                 <ShoppingCart size={20} />
                 {totalItems > 0 && (
@@ -110,7 +110,7 @@ export default function Navbar() {
               <Link to="/profile">
                 <Avatar className="w-9 h-9 transition-transform hover:scale-110">
                   {avatarUrl ? (
-                    <AvatarImage src={avatarUrl} alt="Аватар пользователя" />
+                    <AvatarImage src={avatarUrl} alt="User avatar" />
                   ) : (
                     <AvatarFallback className="bg-dns-blue text-white">
                       {getInitials()}
@@ -125,7 +125,7 @@ export default function Navbar() {
               className={buttonVariants({ variant: "outline", size: "sm" })}
             >
               <LogIn className="mr-2" size={16} />
-              Войти
+              Login
             </Link>
           )}
           
@@ -133,7 +133,7 @@ export default function Navbar() {
             <button 
               onClick={toggleNav} 
               className="p-2 text-dns-darkBlue"
-              aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -147,10 +147,10 @@ export default function Navbar() {
           className={`fixed inset-0 z-40 bg-white p-4 pt-20 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
           <nav className="flex flex-col space-y-6 text-lg">
-            <Link to="/" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Главная</Link>
-            <Link to="/catalog" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Каталог</Link>
-            <Link to="/reviews" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Отзывы</Link>
-            {user && <Link to="/profile" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Профиль</Link>}
+            <Link to="/" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Main</Link>
+            <Link to="/catalog" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Catalog</Link>
+            <Link to="/reviews" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Reviews</Link>
+            {user && <Link to="/profile" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Profile</Link>}
           </nav>
         </div>
       )}

@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { toast } = useToast();
 
   useEffect(() => {
-    // Установить прослушиватель изменений состояния авторизации
+    // Set up auth state change listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         console.log('Auth state changed:', event);
@@ -35,7 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     );
 
-    // Получить текущую сессию при инициализации
+    // Get current session on initialization
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
@@ -56,18 +56,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error;
       
       toast({
-        title: "Успешный вход",
-        description: "Вы успешно вошли в аккаунт",
+        title: "Login successful",
+        description: "You have successfully logged in",
       });
       
       navigate('/');
     } catch (error: any) {
       toast({
-        title: "Ошибка входа",
+        title: "Login error",
         description: error.message,
         variant: "destructive",
       });
-      console.error('Ошибка входа:', error.message);
+      console.error('Login error:', error.message);
     } finally {
       setLoading(false);
     }
@@ -84,17 +84,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error;
       
       toast({
-        title: "Регистрация выполнена",
-        description: "Проверьте вашу почту для подтверждения аккаунта",
+        title: "Registration complete",
+        description: "Please check your email to confirm your account",
       });
       
     } catch (error: any) {
       toast({
-        title: "Ошибка регистрации",
+        title: "Registration error",
         description: error.message,
         variant: "destructive",
       });
-      console.error('Ошибка регистрации:', error.message);
+      console.error('Registration error:', error.message);
     } finally {
       setLoading(false);
     }
@@ -107,6 +107,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         provider: 'google',
         options: {
           redirectTo: window.location.origin,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
       
@@ -114,11 +118,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
     } catch (error: any) {
       toast({
-        title: "Ошибка входа через Google",
+        title: "Google login error",
         description: error.message,
         variant: "destructive",
       });
-      console.error('Ошибка входа через Google:', error.message);
+      console.error('Google login error:', error.message);
       setLoading(false);
     }
   };
@@ -128,17 +132,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(true);
       await supabase.auth.signOut();
       toast({
-        title: "Выход выполнен",
-        description: "Вы вышли из своего аккаунта",
+        title: "Logout complete",
+        description: "You have been logged out of your account",
       });
       navigate('/auth');
     } catch (error: any) {
       toast({
-        title: "Ошибка при выходе",
+        title: "Logout error",
         description: error.message,
         variant: "destructive",
       });
-      console.error('Ошибка при выходе:', error.message);
+      console.error('Logout error:', error.message);
     } finally {
       setLoading(false);
     }
