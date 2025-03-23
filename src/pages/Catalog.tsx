@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, ShoppingCart, Sliders, ChevronDown, SlidersHorizontal, Grid3X3, List } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
@@ -124,19 +123,15 @@ const Catalog = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Extract unique categories
   const categories = ['all', ...Array.from(new Set(products.map(product => product.category)))];
 
-  // Set page title
   useEffect(() => {
     document.title = 'DNStoDNS - каталог';
   }, []);
 
-  // Filter and sort products
   useEffect(() => {
     let result = [...products];
     
-    // Filter by search term
     if (searchTerm) {
       result = result.filter(product => 
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -144,22 +139,18 @@ const Catalog = () => {
       );
     }
     
-    // Filter by category
     if (selectedCategory !== 'all') {
       result = result.filter(product => product.category === selectedCategory);
     }
     
-    // Filter by price range
     result = result.filter(product => 
       product.price >= priceRange.min && product.price <= priceRange.max
     );
     
-    // Filter by availability
     if (showOnlyInStock) {
       result = result.filter(product => product.inStock);
     }
     
-    // Sort products
     switch (sortOption) {
       case 'price-asc':
         result.sort((a, b) => a.price - b.price);
@@ -174,19 +165,16 @@ const Catalog = () => {
         result.sort((a, b) => a.name.localeCompare(b.name));
         break;
       default:
-        // Default sorting (by id)
         result.sort((a, b) => a.id - b.id);
     }
     
     setFilteredProducts(result);
   }, [products, searchTerm, selectedCategory, sortOption, priceRange, showOnlyInStock]);
 
-  // Format price with spaces
   const formatPrice = (price: number) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
 
-  // Calculate final price with discount
   const calculateFinalPrice = (price: number, discount?: number) => {
     if (!discount) return price;
     return price - (price * (discount / 100));
@@ -217,7 +205,6 @@ const Catalog = () => {
         </div>
         
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Filters sidebar - desktop */}
           <div className="hidden lg:block w-64 bg-white rounded-lg shadow p-4 h-fit">
             <h2 className="font-bold text-lg mb-4">Фильтры</h2>
             
@@ -286,9 +273,7 @@ const Catalog = () => {
             </div>
           </div>
           
-          {/* Main content */}
           <div className="flex-1">
-            {/* Search & Mobile filters */}
             <div className="flex flex-col sm:flex-row gap-3 mb-6">
               <div className="relative flex-1">
                 <input
@@ -304,9 +289,8 @@ const Catalog = () => {
               <Select 
                 value={sortOption} 
                 onValueChange={setSortOption}
-                className="sm:w-48 lg:hidden"
               >
-                <SelectTrigger>
+                <SelectTrigger className="sm:w-48 lg:hidden">
                   <SlidersHorizontal size={16} className="mr-2" />
                   <SelectValue placeholder="Сортировка" />
                 </SelectTrigger>
@@ -328,7 +312,6 @@ const Catalog = () => {
               </button>
             </div>
             
-            {/* Mobile filters */}
             <Collapsible open={isFilterOpen} className="lg:hidden mb-6">
               <CollapsibleContent>
                 <div className="bg-white rounded-lg shadow p-4 mb-6">
@@ -385,12 +368,10 @@ const Catalog = () => {
               </CollapsibleContent>
             </Collapsible>
             
-            {/* Results summary */}
             <div className="mb-4 text-sm text-gray-500">
               Найдено товаров: {filteredProducts.length}
             </div>
             
-            {/* Products grid/list */}
             {filteredProducts.length === 0 ? (
               <div className="bg-white rounded-lg p-8 text-center">
                 <h3 className="text-lg font-medium mb-2">Товары не найдены</h3>
