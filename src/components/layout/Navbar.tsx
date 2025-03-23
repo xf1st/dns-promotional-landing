@@ -77,7 +77,7 @@ export default function Navbar() {
               <path d="M21 10H28V25C28 27.7614 25.7614 30 23 30H21V10Z" fill="white" />
               <path d="M30 10H32C32.5523 10 33 10.4477 33 11V29C33 29.5523 32.5523 30 32 30H30V10Z" fill="white" />
             </svg>
-            <span className="ml-2 text-lg font-bold text-dns-darkBlue">DNStoDNS</span>
+            <span className="ml-2 text-lg font-bold bg-gradient-to-r from-dns-blue via-[#9b87f5] to-[#D946EF] bg-clip-text text-transparent">DNStoDNS</span>
           </Link>
           
           {!isMobile && (
