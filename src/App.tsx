@@ -12,6 +12,7 @@ import Catalog from "./pages/Catalog";
 import Reviews from "./pages/Reviews";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import Profile from "./pages/Profile";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
 
@@ -30,6 +31,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/catalog" element={<Catalog />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/reviews" element={<Reviews />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />

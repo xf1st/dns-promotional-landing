@@ -1,11 +1,12 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ShoppingCart, Heart, Star, LogIn } from 'lucide-react';
+import { ShoppingCart, Heart, Star, LogIn, Eye } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { toast } from "sonner";
+import ProductDetailModal from '@/components/catalog/ProductDetailModal';
 
 const products = [
   {
@@ -17,7 +18,9 @@ const products = [
     rating: 4.9,
     image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8bGFwdG9wfHx8fHx8MTcwODc5MTYyMQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500",
     isNew: true,
-    discount: 15
+    discount: 15,
+    description: "Мощный ноутбук с процессором Apple M2 Pro, 16 ГБ RAM, 512 ГБ SSD, 16-дюймовым Retina-дисплеем и профессиональной графикой.",
+    inStock: true
   },
   {
     id: 2,
@@ -28,7 +31,9 @@ const products = [
     rating: 4.8,
     image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8c21hcnRwaG9uZXx8fHx8fDE3MDg3OTE3MTY&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500",
     isNew: true,
-    discount: 10
+    discount: 10,
+    description: "Флагманский смартфон с 6.8-дюймовым AMOLED-экраном, камерой 200 МП, аккумулятором 5000 мАч и стилусом S Pen в комплекте.",
+    inStock: true
   },
   {
     id: 3,
@@ -39,7 +44,9 @@ const products = [
     rating: 4.7,
     image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8aGVhZHBob25lc3x8fHx8fDE3MDg3OTE3Njc&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500",
     isNew: false,
-    discount: 10
+    discount: 10,
+    description: "Премиальные беспроводные наушники с продвинутым шумоподавлением, качественным звуком и временем работы до 30 часов.",
+    inStock: true
   },
   {
     id: 4,
@@ -50,7 +57,9 @@ const products = [
     rating: 4.8,
     image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8aXBhZHx8fHx8fDE3MDg3OTE4MjY&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500",
     isNew: false,
-    discount: 8
+    discount: 8,
+    description: "Профессиональный планшет с 12.9-дюймовым Liquid Retina XDR дисплеем, процессором M2 и поддержкой Apple Pencil и Magic Keyboard.",
+    inStock: true
   }
 ];
 
@@ -58,11 +67,18 @@ const formatPrice = (price: number) => {
   return new Intl.NumberFormat('ru-RU').format(price) + ' ₽';
 };
 
+const calculateFinalPrice = (price: number, discount?: number) => {
+  if (!discount) return price;
+  return price - (price * (discount / 100));
+};
+
 const Products = () => {
   const [favoriteProducts, setFavoriteProducts] = useState<number[]>([]);
   const { addItem, items: cartItems } = useCart();
   const { user } = useAuth();
   const productsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<(typeof products)[0] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleFavorite = (id: number) => {
     if (!user) {
@@ -81,7 +97,9 @@ const Products = () => {
     addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: product.discount 
+        ? Math.round(calculateFinalPrice(product.price, product.discount)) 
+        : product.price,
       image: product.image,
       category: product.category
     });
@@ -90,6 +108,11 @@ const Products = () => {
   // Проверяем, находится ли товар в корзине
   const isInCart = (id: number) => {
     return cartItems.some(item => item.id === id);
+  };
+
+  const openProductModal = (product: (typeof products)[0]) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -176,16 +199,24 @@ const Products = () => {
                   alt={product.name} 
                   className="w-full h-64 object-cover rounded-lg transition-transform duration-500 group-hover:scale-105"
                 />
-                <button 
-                  onClick={() => toggleFavorite(product.id)}
-                  className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                    favoriteProducts.includes(product.id) 
-                      ? 'bg-dns-blue text-white' 
-                      : 'bg-white/80 text-dns-darkGray hover:text-dns-blue'
-                  }`}
-                >
-                  <Heart size={18} fill={favoriteProducts.includes(product.id) ? 'currentColor' : 'none'} />
-                </button>
+                <div className="absolute top-3 right-3 flex flex-col gap-2">
+                  <button 
+                    onClick={() => toggleFavorite(product.id)}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                      favoriteProducts.includes(product.id) 
+                        ? 'bg-dns-blue text-white' 
+                        : 'bg-white/80 text-dns-darkGray hover:text-dns-blue'
+                    }`}
+                  >
+                    <Heart size={18} fill={favoriteProducts.includes(product.id) ? 'currentColor' : 'none'} />
+                  </button>
+                  <button 
+                    onClick={() => openProductModal(product)}
+                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors bg-white/80 text-dns-darkGray hover:text-dns-blue"
+                  >
+                    <Eye size={18} />
+                  </button>
+                </div>
               </div>
               
               <div className="mb-2">
@@ -205,17 +236,23 @@ const Products = () => {
               <div className="flex justify-between items-center">
                 <div>
                   <div className="flex items-center">
-                    <span className="text-xl font-bold text-dns-darkBlue mr-2">{formatPrice(product.price)}</span>
+                    <span className="text-xl font-bold text-dns-darkBlue mr-2">
+                      {formatPrice(product.discount 
+                        ? Math.round(calculateFinalPrice(product.price, product.discount)) 
+                        : product.price)}
+                    </span>
                     {product.oldPrice && (
                       <span className="text-sm text-dns-darkGray line-through">{formatPrice(product.oldPrice)}</span>
                     )}
                   </div>
                 </div>
                 
-                <button 
+                <Button 
                   onClick={() => handleAddToCart(product)}
                   disabled={!user}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  variant="ghost"
+                  size="icon"
+                  className={`rounded-full ${
                     !user 
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                       : isInCart(product.id)
@@ -224,21 +261,36 @@ const Products = () => {
                   }`}
                 >
                   {!user ? <LogIn size={18} /> : <ShoppingCart size={18} />}
-                </button>
+                </Button>
               </div>
             </div>
           ))}
         </div>
         
         <div className="text-center mt-12">
-          <a href="/catalog" className="dns-button-primary inline-flex items-center">
+          <Link to="/catalog" className="dns-button-primary inline-flex items-center">
             <span>Смотреть все товары</span>
             <svg className="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
+
+      {selectedProduct && (
+        <ProductDetailModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          product={{
+            ...selectedProduct,
+            inStock: true // Since we don't explicitly track this in home products
+          }}
+          onAddToCart={handleAddToCart}
+          isInCart={isInCart(selectedProduct.id)}
+          formatPrice={formatPrice}
+          calculateFinalPrice={calculateFinalPrice}
+        />
+      )}
     </section>
   );
 };

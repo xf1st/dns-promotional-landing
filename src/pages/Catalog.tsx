@@ -1,9 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ShoppingCart, Sliders, ChevronDown, SlidersHorizontal, Grid3X3, List } from 'lucide-react';
+import { Search, Filter, ShoppingCart, Sliders, ChevronDown, SlidersHorizontal, Grid3X3, List, Eye } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { useCart } from '@/hooks/useCart';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
+import ProductDetailModal from '@/components/catalog/ProductDetailModal';
 
 interface Product {
   id: number;
@@ -122,6 +127,11 @@ const Catalog = () => {
   const [showOnlyInStock, setShowOnlyInStock] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { addItem, items: cartItems } = useCart();
+  const { user } = useAuth();
 
   const categories = ['all', ...Array.from(new Set(products.map(product => product.category)))];
 
@@ -178,6 +188,29 @@ const Catalog = () => {
   const calculateFinalPrice = (price: number, discount?: number) => {
     if (!discount) return price;
     return price - (price * (discount / 100));
+  };
+
+  const handleAddToCart = (product: Product) => {
+    if (!user) return;
+    
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.discount 
+        ? Math.round(calculateFinalPrice(product.price, product.discount)) 
+        : product.price,
+      image: product.image,
+      category: product.category
+    });
+  };
+
+  const isInCart = (id: number) => {
+    return cartItems.some(item => item.id === id);
+  };
+
+  const openProductModal = (product: Product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
   };
 
   return (
@@ -424,13 +457,25 @@ const Catalog = () => {
                         </div>
                       )}
                       
-                      <button 
-                        className="w-full bg-dns-blue hover:bg-blue-700 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2 transition-colors"
-                        disabled={!product.inStock}
-                      >
-                        <ShoppingCart size={16} />
-                        В корзину
-                      </button>
+                      <div className="flex gap-2">
+                        <Button 
+                          className="flex-1 bg-dns-blue hover:bg-blue-700 text-white rounded-md flex items-center justify-center gap-2 transition-colors"
+                          onClick={() => handleAddToCart(product)}
+                          disabled={!product.inStock || !user}
+                          variant={isInCart(product.id) ? "secondary" : "default"}
+                        >
+                          <ShoppingCart size={16} />
+                          {isInCart(product.id) ? 'В корзине' : 'В корзину'}
+                        </Button>
+                        
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => openProductModal(product)}
+                        >
+                          <Eye size={16} />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -466,6 +511,14 @@ const Catalog = () => {
                       </div>
                       <h3 className="font-medium text-gray-900 mb-2">{product.name}</h3>
                       <p className="text-gray-500 text-sm mb-4">{product.description}</p>
+                      <Button
+                        variant="ghost"
+                        onClick={() => openProductModal(product)}
+                        className="text-dns-blue"
+                      >
+                        <Eye size={16} className="mr-2" />
+                        Подробнее
+                      </Button>
                     </div>
                     <div className="w-full md:w-1/5 flex flex-col justify-between">
                       {product.discount ? (
@@ -483,13 +536,15 @@ const Catalog = () => {
                         </div>
                       )}
                       
-                      <button 
-                        className="w-full bg-dns-blue hover:bg-blue-700 text-white py-2 px-4 rounded-md flex items-center justify-center gap-2 transition-colors"
-                        disabled={!product.inStock}
+                      <Button 
+                        className="w-full justify-between bg-dns-blue hover:bg-blue-700 text-white rounded-md flex items-center justify-center gap-2 transition-colors"
+                        onClick={() => handleAddToCart(product)}
+                        disabled={!product.inStock || !user}
+                        variant={isInCart(product.id) ? "secondary" : "default"}
                       >
                         <ShoppingCart size={16} />
-                        В корзину
-                      </button>
+                        {isInCart(product.id) ? 'В корзине' : 'В корзину'}
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -499,6 +554,18 @@ const Catalog = () => {
         </div>
       </main>
       <Footer />
+      
+      {selectedProduct && (
+        <ProductDetailModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          product={selectedProduct}
+          onAddToCart={handleAddToCart}
+          isInCart={isInCart(selectedProduct.id)}
+          formatPrice={formatPrice}
+          calculateFinalPrice={calculateFinalPrice}
+        />
+      )}
     </div>
   );
 };
