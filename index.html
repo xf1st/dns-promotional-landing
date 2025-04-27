@@ -3,12 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.gpteng.co; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.dns-shop.ru;" />
+    
     <title>DNS - Промо-лендинг</title>
     <meta name="description" content="Промо-лендинг DNS - специальные предложения и акции" />
     <meta name="author" content="DNS" />
     <meta name="keywords" content="DNS, промо, акции, скидки, специальные предложения" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#ffffff" />
+    <link rel="canonical" href="https://promo.dns-shop.ru" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -16,6 +21,7 @@
     <meta property="og:description" content="Промо-лендинг DNS - специальные предложения и акции" />
     <meta property="og:site_name" content="DNS" />
     <meta property="og:locale" content="ru_RU" />
+    <meta property="og:url" content="https://promo.dns-shop.ru" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -26,15 +32,38 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/src/main.tsx" as="script" />
+    <link rel="preload" href="/src/index.css" as="style" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" />
+
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.dns-shop.ru" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "DNS - Промо-лендинг",
+      "url": "https://promo.dns-shop.ru",
+      "description": "Промо-лендинг DNS - специальные предложения и акции",
+      "publisher": {
+        "@type": "Organization",
+        "name": "DNS",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://promo.dns-shop.ru/logo.png"
+        }
+      }
+    }
+    </script>
   </head>
 
   <body>
     <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

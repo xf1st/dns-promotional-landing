@@ -1,69 +1,110 @@
-# Welcome to your Lovable project
+# DNS Промо-лендинг
 
-## Project info
+## Описание проекта
 
-**URL**: https://lovable.dev/projects/e04c4c04-409a-4247-8570-d67173fa8896
+Промо-лендинг для DNS с современным дизайном и оптимизированной производительностью. Проект создан с использованием современных технологий и лучших практик разработки.
 
-## How can I edit this code?
+## 🚀 Технологии
 
-There are several ways of editing your application.
+- **Vite** - Сборщик проекта
+- **React 18** - Библиотека для создания пользовательских интерфейсов
+- **TypeScript** - Типизированный JavaScript
+- **Tailwind CSS** - Утилитарный CSS фреймворк
+- **shadcn/ui** - Компоненты пользовательского интерфейса
+- **React Router** - Маршрутизация
+- **React Query** - Управление состоянием и кэширование
+- **Zod** - Валидация данных
+- **Supabase** - Бэкенд и аутентификация
 
-**Use Lovable**
+## 🛠 Установка и запуск
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e04c4c04-409a-4247-8570-d67173fa8896) and start prompting.
+### Предварительные требования
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js (версия 18 или выше)
+- npm или yarn
 
-**Use your preferred IDE**
+### Установка зависимостей
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+npm install
+# или
+yarn install
 ```
 
-**Edit a file directly in GitHub**
+### Запуск в режиме разработки
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+npm run dev
+# или
+yarn dev
+```
 
-**Use GitHub Codespaces**
+### Сборка для продакшена
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+npm run build
+# или
+yarn build
+```
 
-## What technologies are used for this project?
+### Предпросмотр продакшен-сборки
 
-This project is built with .
+```bash
+npm run preview
+# или
+yarn preview
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📁 Структура проекта
 
-## How can I deploy this project?
+```
+src/
+├── components/     # Переиспользуемые компоненты
+├── pages/         # Страницы приложения
+├── hooks/         # Пользовательские хуки
+├── lib/           # Утилиты и конфигурации
+├── integrations/  # Интеграции с внешними сервисами
+└── styles/        # Глобальные стили
+```
 
-Simply open [Lovable](https://lovable.dev/projects/e04c4c04-409a-4247-8570-d67173fa8896) and click on Share -> Publish.
+## 🔧 Настройка окружения
 
-## I want to use a custom domain - is that possible?
+Создайте файл `.env` в корне проекта со следующими переменными:
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_key
+```
+
+## 🧪 Тестирование
+
+```bash
+npm run test
+# или
+yarn test
+```
+
+## 📦 Деплой
+
+Проект можно развернуть на любом хостинге, поддерживающем статические сайты:
+
+- Vercel
+- Netlify
+- GitHub Pages
+- Cloudflare Pages
+
+## 🤝 Участие в разработке
+
+1. Форкните репозиторий
+2. Создайте ветку для ваших изменений (`git checkout -b feature/amazing-feature`)
+3. Закоммитьте изменения (`git commit -m 'Add some amazing feature'`)
+4. Запушьте в ветку (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
+
+## 📄 Лицензия
+
+Этот проект лицензирован под MIT License - смотрите файл [LICENSE](LICENSE) для деталей.
+
+## 📞 Контакты
+
+По всем вопросам обращайтесь в техническую поддержку DNS.
