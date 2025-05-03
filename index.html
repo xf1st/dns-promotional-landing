@@ -3,9 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.gpteng.co; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.dns-shop.ru;" />
     
     <!-- Основные мета-теги -->
     <title>DNS - Магазин электроники и бытовой техники | Специальные предложения</title>
@@ -14,7 +11,6 @@
     <meta name="keywords" content="DNS, магазин электроники, бытовая техника, смартфоны, ноутбуки, телевизоры, акции, скидки, специальные предложения" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="theme-color" content="#0066FF" />
-    <link rel="canonical" href="https://dnstodns.ru" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -23,7 +19,6 @@
     <meta property="og:site_name" content="DNS" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:url" content="https://dnstodns.ru" />
-    <meta property="og:image" content="https://dnstodns.ru/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
@@ -31,7 +26,6 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="DNS - Магазин электроники и бытовой техники" />
     <meta name="twitter:description" content="DNS - крупнейший магазин электроники и бытовой техники. Широкий ассортимент, низкие цены, гарантия качества." />
-    <meta name="twitter:image" content="https://dnstodns.ru/twitter-image.jpg" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.ico" />
@@ -39,42 +33,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <meta name="msapplication-TileColor" content="#0066FF" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
 
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/src/main.tsx" as="script" />
-    <link rel="preload" href="/src/index.css" as="style" />
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" />
-
-    <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://api.dnstodns.ru" />
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "DNS - Магазин электроники и бытовой техники",
-      "url": "https://dnstodns.ru",
-      "description": "DNS - крупнейший магазин электроники и бытовой техники. Широкий ассортимент, низкие цены, гарантия качества.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "DNS",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://dnstodns.ru/logo.png"
-        }
-      }
-    }
-    </script>
   </head>
 
   <body>
     <div id="root"></div>
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

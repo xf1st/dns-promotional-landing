@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error: any) {
       toast({
         title: "Ошибка входа",
-        description: error.message || "Произошла ошибка при входе. Пожалуйста, попробуйте снова.",
+        description: error.message,
         variant: "destructive",
       });
       console.error('Ошибка входа:', error.message);
@@ -79,9 +79,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: window.location.origin,
-        }
       });
 
       if (error) throw error;
@@ -94,7 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error: any) {
       toast({
         title: "Ошибка регистрации",
-        description: error.message || "Произошла ошибка при регистрации. Пожалуйста, попробуйте снова.",
+        description: error.message,
         variant: "destructive",
       });
       console.error('Ошибка регистрации:', error.message);
@@ -122,7 +119,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error: any) {
       toast({
         title: "Ошибка входа через Google",
-        description: error.message || "Произошла ошибка при входе через Google. Пожалуйста, попробуйте снова.",
+        description: error.message,
         variant: "destructive",
       });
       console.error('Ошибка входа через Google:', error.message);
@@ -142,7 +139,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error: any) {
       toast({
         title: "Ошибка при выходе",
-        description: error.message || "Произошла ошибка при выходе. Пожалуйста, попробуйте снова.",
+        description: error.message,
         variant: "destructive",
       });
       console.error('Ошибка при выходе:', error.message);

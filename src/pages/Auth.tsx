@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -48,7 +49,7 @@ const Auth = () => {
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <a href="/" className="text-2xl font-bold flex items-center">
-              <span className="bg-gradient-to-r from-[#4DA6FF] to-[#0066FF] bg-clip-text text-transparent">DNSStore</span>
+              <span className="bg-gradient-to-r from-dns-blue via-[#9b87f5] to-[#D946EF] bg-clip-text text-transparent">DNSStore</span>
             </a>
           </div>
           <CardTitle className="text-2xl text-center">Добро пожаловать</CardTitle>
