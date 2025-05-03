@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ShoppingCart, LogIn, UserCircle } from 'lucide-react';
@@ -73,11 +72,9 @@ export default function Navbar() {
           <Link to="/" className="flex items-center mr-8">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="40" height="40" rx="8" fill="#0066FF" />
-              <path d="M10 10H17V25C17 27.7614 14.7614 30 12 30H10V10Z" fill="white" />
-              <path d="M21 10H28V25C28 27.7614 25.7614 30 23 30H21V10Z" fill="white" />
-              <path d="M30 10H32C32.5523 10 33 10.4477 33 11V29C33 29.5523 32.5523 30 32 30H30V10Z" fill="white" />
+              <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fill="white" fontFamily="Arial" fontSize="16" fontWeight="bold">DNS</text>
             </svg>
-            <span className="ml-2 text-lg font-bold bg-gradient-to-r from-dns-blue via-[#9b87f5] to-[#D946EF] bg-clip-text text-transparent">DNStoDNS</span>
+            <span className="ml-2 text-lg font-bold bg-gradient-to-r from-[#4DA6FF] to-[#0066FF] bg-clip-text text-transparent">DNStoDNS</span>
           </Link>
           
           {!isMobile && (
