@@ -28,9 +28,10 @@ DNS Promotional Landing Page - это современный лендинг дл
 - **Language**: TypeScript
 - **Build Tool**: Vite
 - **Styling**: 
-  - Tailwind CSS
-  - Tailwind Merge для условных стилей
-  - Tailwind Animate для анимаций
+  - Tailwind CSS v3.4.11
+  - Tailwind Merge v2.5.2 для условных стилей
+  - Tailwind Animate v1.0.7 для анимаций
+  - Tailwind Typography v0.5.15 для типографики
   - Class Variance Authority для вариантов компонентов
 
 ### Управление состоянием
