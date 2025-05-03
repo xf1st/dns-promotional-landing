@@ -143,11 +143,19 @@ export default function Navbar() {
         <div 
           className={`fixed inset-0 z-40 bg-white p-4 pt-20 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
-          <nav className="flex flex-col space-y-6 text-lg">
-            <Link to="/" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Главная</Link>
-            <Link to="/catalog" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Каталог</Link>
-            <Link to="/reviews" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Отзывы</Link>
-            {user && <Link to="/profile" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b">Профиль</Link>}
+          {/* Кнопка-крестик для закрытия */}
+          <button
+            onClick={toggleNav}
+            className="absolute top-4 right-4 p-2 text-dns-darkBlue"
+            aria-label="Закрыть меню"
+          >
+            <X size={28} />
+          </button>
+          <nav className="flex flex-col space-y-6 text-lg mt-8">
+            <Link to="/" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b" onClick={() => setIsOpen(false)}>Главная</Link>
+            <Link to="/catalog" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b" onClick={() => setIsOpen(false)}>Каталог</Link>
+            <Link to="/reviews" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b" onClick={() => setIsOpen(false)}>Отзывы</Link>
+            {user && <Link to="/profile" className="text-dns-darkBlue hover:text-dns-blue transition-colors py-2 border-b" onClick={() => setIsOpen(false)}>Профиль</Link>}
           </nav>
         </div>
       )}

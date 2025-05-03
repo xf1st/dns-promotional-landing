@@ -1,27 +1,59 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Star } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import AddReview from '@/components/reviews/AddReview';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Review {
-  id: number;
-  name: string;
-  avatar: string;
+  id: number | string;
+  name?: string;
+  avatar?: string;
   rating: number;
   text: string;
-  position: string;
-  product: string;
-  date: string;
+  position?: string;
+  product?: string;
+  date?: string;
+  username?: string | null;
+  content?: string;
+  created_at?: string;
 }
 
 const Reviews = () => {
+  const { user } = useAuth();
+  const [dbReviews, setDbReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
   // Set page title
   useEffect(() => {
     document.title = 'DNStoDNS - отзывы клиентов';
   }, []);
 
-  const reviews: Review[] = [
+  // Загрузка отзывов из Supabase
+  useEffect(() => {
+    const fetchReviews = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        setDbReviews(data.map(r => ({
+          id: r.id,
+          username: r.username,
+          rating: r.rating,
+          text: r.content,
+          created_at: r.created_at,
+        })));
+      }
+      setLoading(false);
+    };
+    fetchReviews();
+  }, []);
+
+  const staticReviews: Review[] = [
     {
       id: 1,
       name: 'Александр Петров',
@@ -30,7 +62,7 @@ const Reviews = () => {
       text: 'Отличный магазин! Быстрая доставка, качественные товары и хорошие цены. Я регулярно делаю покупки здесь и всегда остаюсь доволен обслуживанием.',
       position: 'Программист',
       product: 'Ноутбук Asus ROG Strix',
-      date: '15.05.2023'
+      date: '15.01.2024'
     },
     {
       id: 2,
@@ -40,7 +72,7 @@ const Reviews = () => {
       text: 'Заказывала смартфон, привезли на следующий день. Качество товара на высоте, цена ниже, чем в других магазинах. Рекомендую!',
       position: 'Дизайнер',
       product: 'iPhone 14 Pro',
-      date: '03.06.2023'
+      date: '03.06.2024'
     },
     {
       id: 3,
@@ -50,7 +82,7 @@ const Reviews = () => {
       text: 'Покупал комплектующие для ПК. Большой выбор, грамотные консультации и быстрая доставка. Однозначно лучший магазин электроники!',
       position: 'Инженер',
       product: 'Комплектующие для ПК',
-      date: '22.07.2023'
+      date: '22.07.2024'
     },
     {
       id: 4,
@@ -60,7 +92,7 @@ const Reviews = () => {
       text: 'Очень довольна покупкой холодильника. Менеджер помог выбрать модель под мои требования, доставка была в точно оговоренное время, установка заняла минимум времени.',
       position: 'Врач',
       product: 'Холодильник Samsung',
-      date: '11.08.2023'
+      date: '11.08.2024'
     },
     {
       id: 5,
@@ -70,7 +102,7 @@ const Reviews = () => {
       text: 'Покупка прошла гладко, товар соответствует описанию. Единственное - была небольшая задержка с доставкой, но меня предупредили заранее.',
       position: 'Менеджер',
       product: 'Телевизор LG OLED',
-      date: '29.09.2023'
+      date: '29.09.2024'
     },
     {
       id: 6,
@@ -80,7 +112,7 @@ const Reviews = () => {
       text: 'Приобрела кофемашину. Спасибо консультанту за подробное объяснение всех функций. Доставили в целости и сохранности, работает отлично!',
       position: 'Преподаватель',
       product: 'Кофемашина De\'Longhi',
-      date: '14.10.2023'
+      date: '14.10.2024'
     },
     {
       id: 7,
@@ -90,7 +122,7 @@ const Reviews = () => {
       text: 'В целом доволен покупкой, но было несколько моментов: долго ждал ответа от службы поддержки, и в комплекте не было обещанного аксессуара. После обращения вопрос решили.',
       position: 'Архитектор',
       product: 'Планшет iPad Pro',
-      date: '05.11.2023'
+      date: '05.11.2024'
     },
     {
       id: 8,
@@ -100,7 +132,7 @@ const Reviews = () => {
       text: 'Второй раз заказываю в этом магазине и снова все идеально! Быстрая доставка, вежливый курьер, товар в отличном состоянии. Буду обращаться еще!',
       position: 'Бухгалтер',
       product: 'Фотоаппарат Canon',
-      date: '23.12.2023'
+      date: '23.12.2024'
     },
     {
       id: 9,
@@ -114,10 +146,12 @@ const Reviews = () => {
     }
   ];
 
+  // Объединяем отзывы из БД и статичные
+  const allReviews = [...dbReviews, ...staticReviews];
+
   return (
     <div className="min-h-screen">
       <Navbar />
-      
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
@@ -127,57 +161,72 @@ const Reviews = () => {
               Ознакомьтесь с отзывами тех, кто уже совершил покупки в нашем магазине.
             </p>
           </div>
-          
+
+          <div className="mb-8 text-center">
+            {user && (
+              <button
+                className="dns-button-primary mb-4"
+                onClick={() => setShowForm(f => !f)}
+              >
+                {showForm ? 'Скрыть форму' : 'Оставить отзыв'}
+              </button>
+            )}
+            {showForm && user && (
+              <div className="max-w-xl mx-auto mb-8">
+                <AddReview onReviewAdded={() => window.location.reload()} />
+              </div>
+            )}
+          </div>
+
+          {loading && <div className="text-center text-dns-darkGray mb-8">Загрузка отзывов...</div>}
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {reviews.map((review) => (
-              <div 
-                key={review.id} 
+            {allReviews.map((review) => (
+              <div
+                key={review.id}
                 className="bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow"
               >
                 <div className="flex items-center mb-4">
-                  <img 
-                    src={review.avatar} 
-                    alt={review.name} 
-                    className="w-12 h-12 rounded-full mr-4 object-cover" 
-                  />
+                  {review.avatar ? (
+                    <img
+                      src={review.avatar}
+                      alt={review.name}
+                      className="w-12 h-12 rounded-full mr-4 object-cover"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full mr-4 bg-dns-gray flex items-center justify-center text-dns-darkBlue font-bold text-lg">
+                      {review.username ? review.username[0].toUpperCase() : '?'}
+                    </div>
+                  )}
                   <div>
-                    <h4 className="font-semibold text-dns-darkBlue">{review.name}</h4>
-                    <p className="text-sm text-dns-darkGray">{review.position}</p>
+                    <h4 className="font-semibold text-dns-darkBlue">{review.name || review.username || 'Пользователь'}</h4>
+                    {review.position && <p className="text-sm text-dns-darkGray">{review.position}</p>}
                   </div>
                 </div>
-                
+
                 <div className="flex mb-2">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star 
-                      key={i} 
-                      size={18} 
-                      className={i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} 
+                    <Star
+                      key={i}
+                      size={18}
+                      className={i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}
                     />
                   ))}
                 </div>
-                
+
                 <p className="text-dns-darkGray mb-4">"{review.text}"</p>
-                
+
                 <div className="flex justify-between items-center text-sm">
-                  <div className="font-medium text-dns-blue">
-                    {review.product}
-                  </div>
+                  {review.product && <div className="font-medium text-dns-blue">{review.product}</div>}
                   <div className="text-dns-darkGray">
-                    {review.date}
+                    {review.date || (review.created_at && new Date(review.created_at).toLocaleDateString())}
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          
-          <div className="mt-12 text-center">
-            <p className="text-dns-darkGray mb-6">
-              Хотите оставить свой отзыв о покупке? Авторизуйтесь в личном кабинете и поделитесь своими впечатлениями.
-            </p>
-          </div>
         </div>
       </main>
-      
       <Footer />
     </div>
   );

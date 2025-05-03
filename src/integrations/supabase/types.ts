@@ -32,6 +32,43 @@ export type Database = {
           username?: string | null
         }
         Relationships: []
+      },
+      reviews: {
+        Row: {
+          id: string;
+          user_id: string;
+          username: string | null;
+          content: string;
+          rating: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          username?: string | null;
+          content: string;
+          rating: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          username?: string | null;
+          content?: string;
+          rating?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "reviews_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          }
+        ];
       }
     }
     Views: {
